@@ -57,10 +57,25 @@ With the Authorization code running, this section will describe how to create an
 
 1. Open the watsonx Assistant available to you and create a new Assistant.  If this a new Assistant service, the *Create a new assistant* dialog will be showing upon login.  Otherwise, create a new assistant with the *Create New +* option in the selector on the top bar.
 
-   [Create Assistant](./assets/images/create_assistant.png)
+   ![Create Assistant](./assets/images/create_assistant.png)
 
-2. add the extension as avi-lookup
-3. import the following skill for the assistant
+2. A [Custom Extension](https://cloud.ibm.com/docs/watson-assistant?topic=watson-assistant-add-custom-extension) will be used to connect watsonx Assistant to AVI for address verification.  To add a custom extenstion, first go to the **Integrations** section of the Assistant.
+   1. From the Integrations section, scroll down and select **Build custom extension**.  This will open a dialog to import the openapi specification provided below.
+      [OpenAPI spec for AVI](./assets/assistant-json/openapi_avi.json)
+   2. In the Basic information, provide a name and description.  It is recommended to use the name **AVI** as this will make the next steps easier.  Click Next.
+   3. Upload the OpenAPI spec downloaded from above, then click Next.
+   4. A review of the specification will be displayed.  It should look similar to the below screenshot.  Click Finish.
+      ![Custom Extension Review](./assets/images/custom_extension_review.png)
+   5. Once the Custom Extension has been uploaded to the Assistant, credentials will need to be provided.  To do this, click on the *Add +* button on the newly created **AVI** tile.  Select Add to go into the dialog, then select Next to go into the *Authorization* section.
+   6. Change the Authorization type to **OAuth 2.0**.  Provide your username and password for authenticating the AVI service in required fields as well as the  URL for your AVI service.  Select Next then Finish.
+      ![Custom Extension Authorization](./assets/images/custom_extension_auth.png)
+
+3. Now that the custom extension is in place, it is time to import an address verification Action into the assistant.  Download the Action below.
+   [Download Assistant Action](./assets/assistant-json/AVI-action.json)
+4. In the Assistant UI, navigate to **Actions**.  There will be a gear icon in the upper right corner of the screen for global settings.  Open this window and click on the *Upload/Download* tab.  Upload the AVI-action.json file to this window and select Upload.  
+   > **Warning**  
+   > This will replace all data in the Assistant, so ensure that the correct Assistant is selected.
+5. 
 
 ## Use the Preview to verify an address
 
