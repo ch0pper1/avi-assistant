@@ -1,0 +1,14 @@
+{
+  "__ce_body": "password=password&username=jason&grant_type=",
+  "__ce_headers": {
+    "Accept": "application/json, text/plain, */*",
+    "Accept-Encoding": "gzip,deflate",
+    "Content-Length": "44",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36",
+    "X-Request-Id": "e4cce020-0611-4d6c-af69-47e689e4167f"
+  },
+  "__ce_method": "POST",
+  "__ce_path": "/",
+  "__ce_query": ""
+}

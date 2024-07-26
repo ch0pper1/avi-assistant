@@ -1,0 +1,1514 @@
+{
+  "name": "Jason L Testing-action",
+  "type": "action",
+  "valid": true,
+  "status": "Available",
+  "created": "2024-05-20T01:55:46.766Z",
+  "updated": "2024-07-25T20:51:29.082Z",
+  "language": "en",
+  "skill_id": "5335ff31-a209-40a7-8408-e02564c126aa",
+  "workspace": {
+    "actions": [
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "step_492",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "\"\""
+                  },
+                  "skill_variable": "Formatted_Address"
+                },
+                {
+                  "value": {
+                    "scalar": false
+                  },
+                  "skill_variable": "quality_1"
+                },
+                {
+                  "value": {
+                    "scalar": false
+                  },
+                  "skill_variable": "quality_2"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_492",
+            "next_step": "step_891"
+          },
+          {
+            "step": "step_891",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "What is your Address?"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "context": {
+              "variables": []
+            },
+            "handlers": [],
+            "question": {
+              "free_text": true
+            },
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_891",
+            "next_step": "step_451"
+          },
+          {
+            "step": "step_451",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "[\n  {\n    \"Address\": ${step_891},\n    \"Country\": \"\",\n    \"City\": \"\",\n    \"State\": \"\",\n    \"Zip\": \"\"\n  }\n]"
+                  },
+                  "skill_variable": "address"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "callout",
+              "callout": {
+                "path": "/data_intg/v3/dataservice/ds-service-no-null",
+                "type": "integration_interaction",
+                "method": "POST",
+                "internal": {
+                  "spec_hash_id": "6c3ff876b2dbfd846e9fa098df5a6159a14146e5902bb202d2d9b1a956df4dbd",
+                  "match_scenario": 1,
+                  "catalog_item_id": "be93372d-23ca-4b60-ac2f-6d7468113d53"
+                },
+                "request_mapping": {
+                  "body": [
+                    {
+                      "value": {
+                        "skill_variable": "address"
+                      },
+                      "parameter": "input_data"
+                    },
+                    {
+                      "value": {
+                        "expression": "\"-1\""
+                      },
+                      "parameter": "job_parameters.$APT_JOB_MONITOR_TIMEOUT"
+                    }
+                  ],
+                  "query": [
+                    {
+                      "value": {
+                        "skill_variable": "project_id"
+                      },
+                      "parameter": "project_id"
+                    }
+                  ]
+                },
+                "result_variable": "step_451_result_1"
+              }
+            },
+            "variable": "step_451",
+            "next_step": "step_170"
+          },
+          {
+            "step": "step_170",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "${step_451_result_1.body.result.return_value}.get(0).AccuracyCode_QSAV.matches('[VP]4\\d-.{3}-.{2}-(100|09[5-9])')"
+                  },
+                  "skill_variable": "quality_1"
+                },
+                {
+                  "value": {
+                    "expression": "(${step_451_result_1.body.result.return_value}.get(0).FormattedAddress1_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress2_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress3_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress4_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress5_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress6_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress7_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress8_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress9_QSAV + '\\n' +\n${step_451_result_1.body.result.return_value}.get(0).FormattedAddress10_QSAV).trim()"
+                  },
+                  "skill_variable": "Formatted_Address"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_170",
+            "next_step": "step_450"
+          },
+          {
+            "step": "step_450",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "${step_451_result_1.body.result.return_value}.get(0).AccuracyCode_QSAV.matches('[VP]4\\d-.{3}-.{2}-(0[1-8][0-9]|09[0-4])')"
+                  },
+                  "skill_variable": "quality_2"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_450",
+            "condition": {
+              "eq": [
+                {
+                  "skill_variable": "quality_1"
+                },
+                {
+                  "scalar": false
+                }
+              ]
+            },
+            "next_step": "step_504"
+          },
+          {
+            "step": "step_504",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "Your address has been verified.  Here are the results.\n\n\n\n"
+                          },
+                          {
+                            "skill_variable": "Formatted_Address"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_504",
+            "condition": {
+              "and": [
+                {
+                  "eq": [
+                    {
+                      "variable": "step_451_result_1",
+                      "variable_path": "success"
+                    },
+                    {
+                      "scalar": true
+                    }
+                  ]
+                },
+                {
+                  "eq": [
+                    {
+                      "skill_variable": "quality_1"
+                    },
+                    {
+                      "scalar": true
+                    }
+                  ]
+                }
+              ]
+            },
+            "next_step": "step_281"
+          },
+          {
+            "step": "step_281",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The address you entered has been corrected to:\n\n\n\n"
+                          },
+                          {
+                            "skill_variable": "Formatted_Address"
+                          },
+                          {
+                            "scalar": "\n\n<br />\n\n\n\nWould you like to use this address?"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential",
+                  "repeat_on_reprompt": false
+                },
+                {
+                  "options": [
+                    {
+                      "label": "Yes",
+                      "value": {
+                        "input": {
+                          "text": "Yes"
+                        }
+                      }
+                    },
+                    {
+                      "label": "No",
+                      "value": {
+                        "input": {
+                          "text": "No"
+                        }
+                      }
+                    }
+                  ],
+                  "response_type": "option",
+                  "repeat_on_reprompt": true
+                }
+              ]
+            },
+            "handlers": [
+              {
+                "type": "not_found",
+                "title": "validation_not_found_handler",
+                "output": {
+                  "generic": [
+                    {
+                      "values": [
+                        {
+                          "text_expression": {
+                            "concat": [
+                              {
+                                "scalar": "I'm sorry, I did not catch that, please restate your response."
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "response_type": "text",
+                      "selection_policy": "incremental"
+                    }
+                  ]
+                },
+                "handler": "validation_not_found_handler",
+                "resolver": {
+                  "type": "prompt_again"
+                },
+                "next_handler": "validation_not_found_max_tries_handler"
+              },
+              {
+                "type": "not_found_max_tries",
+                "title": "validation_not_found_max_tries_handler",
+                "handler": "validation_not_found_max_tries_handler",
+                "resolver": {
+                  "type": "fallback"
+                }
+              }
+            ],
+            "question": {
+              "entity": "sys-yes-no",
+              "max_tries": 3,
+              "response_collection_behavior": "always_ask"
+            },
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_281",
+            "condition": {
+              "and": [
+                {
+                  "eq": [
+                    {
+                      "skill_variable": "quality_1"
+                    },
+                    {
+                      "scalar": false
+                    }
+                  ]
+                },
+                {
+                  "eq": [
+                    {
+                      "skill_variable": "quality_2"
+                    },
+                    {
+                      "scalar": true
+                    }
+                  ]
+                }
+              ]
+            },
+            "next_step": "step_185"
+          },
+          {
+            "step": "step_185",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The updated address has been verified.  Thank you."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_185",
+            "condition": {
+              "eq": [
+                {
+                  "variable": "step_281"
+                },
+                {
+                  "scalar": "yes"
+                }
+              ]
+            },
+            "next_step": "step_783"
+          },
+          {
+            "step": "step_783",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "Please re-enter the address for verification."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "replay",
+              "clear": [
+                {
+                  "variable": "step_492"
+                },
+                {
+                  "variable": "step_891"
+                },
+                {
+                  "variable": "step_451"
+                },
+                {
+                  "variable": "step_170"
+                },
+                {
+                  "variable": "step_450"
+                },
+                {
+                  "variable": "step_504"
+                },
+                {
+                  "variable": "step_281"
+                },
+                {
+                  "variable": "step_185"
+                }
+              ]
+            },
+            "variable": "step_783",
+            "condition": {
+              "eq": [
+                {
+                  "variable": "step_281"
+                },
+                {
+                  "scalar": "no"
+                }
+              ]
+            },
+            "next_step": "step_154"
+          },
+          {
+            "step": "step_154",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The Address you entered:\n\n\n\n"
+                          },
+                          {
+                            "skill_variable": "Formatted_Address"
+                          },
+                          {
+                            "scalar": "\n\n<br />\n\n\n\nDoes not appear to be a valid address and no alternatives were found.  Please re-enter your address."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "replay",
+              "clear": [
+                {
+                  "variable": "step_891"
+                },
+                {
+                  "variable": "step_451"
+                },
+                {
+                  "variable": "step_170"
+                },
+                {
+                  "variable": "step_504"
+                }
+              ]
+            },
+            "variable": "step_154",
+            "condition": {
+              "and": [
+                {
+                  "eq": [
+                    {
+                      "variable": "step_451_result_1",
+                      "variable_path": "success"
+                    },
+                    {
+                      "scalar": true
+                    }
+                  ]
+                },
+                {
+                  "eq": [
+                    {
+                      "skill_variable": "quality_1"
+                    },
+                    {
+                      "scalar": false
+                    }
+                  ]
+                },
+                {
+                  "eq": [
+                    {
+                      "skill_variable": "quality_2"
+                    },
+                    {
+                      "scalar": false
+                    }
+                  ]
+                }
+              ]
+            },
+            "next_step": "step_229"
+          },
+          {
+            "step": "step_229",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The address entered could not be verified.  Please enter a new address."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "replay",
+              "clear": [
+                {
+                  "variable": "step_891"
+                },
+                {
+                  "variable": "step_451"
+                },
+                {
+                  "variable": "step_504"
+                }
+              ]
+            },
+            "variable": "step_229",
+            "condition": {
+              "eq": [
+                {
+                  "variable": "step_451_result_1",
+                  "variable_path": "success"
+                },
+                {
+                  "scalar": false
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Verify Address",
+        "action": "action_22717",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "intent": "action_22717_intent_11668"
+        },
+        "variables": [
+          {
+            "title": "The Address you entered: {variable} <br /> Does not appear to be",
+            "privacy": {
+              "enabled": true
+            },
+            "variable": "step_154",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_170",
+            "data_type": "any"
+          },
+          {
+            "title": "The updated address has been verified. Thank you.",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_185",
+            "data_type": "any"
+          },
+          {
+            "title": "The address entered could not be verified. Please enter a new ad",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_229",
+            "data_type": "any"
+          },
+          {
+            "title": "The address you entered has been corrected to: {variable} <br />",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_281",
+            "data_type": "yes_no"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_450",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_451",
+            "data_type": "any"
+          },
+          {
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_451_result_1",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_492",
+            "data_type": "any"
+          },
+          {
+            "title": "Your address has been verified. Here are the results. {variable}",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_504",
+            "data_type": "any"
+          },
+          {
+            "title": "Please re-enter the address for verification.",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_783",
+            "data_type": "any"
+          },
+          {
+            "title": "What is your Address?",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_891",
+            "data_type": "any"
+          }
+        ],
+        "launch_mode": "learning",
+        "next_action": "fallback",
+        "topic_switch": {
+          "allowed_from": true,
+          "allowed_into": true,
+          "never_return": false
+        },
+        "disambiguation_opt_out": false
+      },
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "step_001",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "I'm afraid I don't understand. Please rephrase your question."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_001",
+            "condition": {
+              "lte": [
+                {
+                  "system_variable": "no_action_matches_count"
+                },
+                {
+                  "scalar": 3
+                }
+              ]
+            },
+            "next_step": "step_002"
+          },
+          {
+            "step": "step_002",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": ""
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "invoke_another_action_and_end",
+              "invoke_action": {
+                "action": "fallback",
+                "policy": "default",
+                "parameters": null,
+                "result_variable": "step_002_result_1"
+              }
+            },
+            "variable": "step_002",
+            "condition": {
+              "gt": [
+                {
+                  "system_variable": "no_action_matches_count"
+                },
+                {
+                  "scalar": 3
+                }
+              ]
+            }
+          }
+        ],
+        "title": "No matches",
+        "action": "anything_else",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "expression": "anything_else"
+        },
+        "variables": [
+          {
+            "title": "I am afraid I do not understand what you are asking, please re-p",
+            "variable": "step_001",
+            "data_type": "any"
+          },
+          {
+            "variable": "step_002",
+            "data_type": "any"
+          },
+          {
+            "variable": "step_002_result_1",
+            "data_type": "any"
+          }
+        ],
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "digression_failure",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "Sorry I couldn't confirm if you wanted to return to previous topic, let me connect to an agent."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "digression_failure",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "Failed to confirm topic return"
+                }
+              ]
+            },
+            "next_step": "step_001"
+          },
+          {
+            "step": "step_001",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "I'm afraid I don't understand. I can connect you to an agent."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "step_001",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "Step validation failed"
+                }
+              ]
+            },
+            "next_step": "step_002"
+          },
+          {
+            "step": "step_002",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "Sorry I couldn't assist you. I will connect you to an agent right away."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "step_002",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "Agent requested"
+                }
+              ]
+            },
+            "next_step": "step_003"
+          },
+          {
+            "step": "step_003",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "I am afraid I do not understand what you are asking, let me connect you to an agent."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "step_003",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "No action matches"
+                }
+              ]
+            },
+            "next_step": "step_004"
+          },
+          {
+            "step": "step_004",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "It seems this conversation would be best managed by a human agent. Let me connect you to one of our agents."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "step_004",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "Danger word detected"
+                }
+              ]
+            },
+            "next_step": "step_005"
+          },
+          {
+            "step": "step_005",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "It seems this conversation would be best managed by a human agent. Let me connect you to one of our agents."
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "connect_to_agent",
+              "response": {
+                "transfer_info": {
+                  "target": {}
+                },
+                "agent_available": {
+                  "message": "Let's send you to an available agent."
+                },
+                "agent_unavailable": {
+                  "message": "There are no agents available at this time. When one becomes available, we'll connect you."
+                },
+                "message_to_human_agent": ""
+              }
+            },
+            "variable": "step_005",
+            "condition": {
+              "eq": [
+                {
+                  "system_variable": "fallback_reason"
+                },
+                {
+                  "scalar": "Profanity detected"
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Fallback",
+        "action": "fallback",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "intent": "fallback_connect_to_agent"
+        },
+        "variables": [
+          {
+            "title": "Topic return failed",
+            "variable": "digression_failure",
+            "data_type": "any"
+          },
+          {
+            "title": "I'm afraid I don't understand. I can connect you to an agent.",
+            "variable": "step_001",
+            "data_type": "any"
+          },
+          {
+            "title": "Sorry I couldn't assist you. I will connect you to an agent righ",
+            "variable": "step_002",
+            "data_type": "any"
+          },
+          {
+            "title": "I am afraid I do not understand what you are asking, let me conn",
+            "variable": "step_003",
+            "data_type": "any"
+          },
+          {
+            "title": "It seems this conversation would be best managed",
+            "variable": "step_004",
+            "data_type": "any"
+          },
+          {
+            "title": "Profanity - It seems this conversation",
+            "variable": "step_005",
+            "data_type": "any"
+          }
+        ],
+        "next_action": "run_always",
+        "disambiguation_opt_out": true
+      },
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "danger_word_detected",
+            "title": "Connect to agent",
+            "handlers": [],
+            "resolver": {
+              "type": "fallback"
+            },
+            "variable": "danger_word_detected_variable",
+            "condition": {
+              "entity": "danger_words"
+            },
+            "next_step": "profanity_detected"
+          },
+          {
+            "step": "profanity_detected",
+            "title": "Show warning",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "Please use appropriate language when interacting with the assistant."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [
+              {
+                "type": "max_hits",
+                "handler": "max_hits_handler",
+                "resolver": {
+                  "type": "fallback"
+                }
+              }
+            ],
+            "max_hits": 2,
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "profanity_detected_variable",
+            "condition": {
+              "entity": "profane_words"
+            }
+          }
+        ],
+        "title": "Trigger word detected",
+        "action": "run_always",
+        "boosts": [],
+        "handlers": [],
+        "variables": [
+          {
+            "title": "Profanity detected",
+            "variable": "danger_word_detected_variable",
+            "data_type": "any"
+          },
+          {
+            "title": "Profane word detected",
+            "variable": "profanity_detected_variable",
+            "data_type": "any"
+          }
+        ],
+        "next_action": "anything_else"
+      },
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "step_001",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text": "Welcome, how can I assist you?"
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_001"
+          }
+        ],
+        "title": "Greet customer",
+        "action": "welcome",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "expression": "welcome"
+        },
+        "variables": [
+          {
+            "variable": "step_001",
+            "data_type": "any"
+          }
+        ],
+        "next_action": "action_22717",
+        "disambiguation_opt_out": true
+      }
+    ],
+    "intents": [
+      {
+        "intent": "action_22717_intent_11668",
+        "examples": [
+          {
+            "text": "check address for 123 main st yourtown ST"
+          },
+          {
+            "text": "Lookup Address for 1 Orchard Rd, Armonk, NY"
+          },
+          {
+            "text": "Verify Address"
+          }
+        ]
+      },
+      {
+        "intent": "fallback_connect_to_agent",
+        "examples": [
+          {
+            "text": "Agent help"
+          },
+          {
+            "text": "Call agent"
+          },
+          {
+            "text": "Can I connect to an agent?"
+          },
+          {
+            "text": "I would like to speak to a human"
+          },
+          {
+            "text": "I would like to speak to someone"
+          }
+        ],
+        "description": "Please transfer me to an agent"
+      }
+    ],
+    "entities": [
+      {
+        "entity": "danger_words",
+        "values": [],
+        "fuzzy_match": false
+      },
+      {
+        "entity": "profane_words",
+        "values": [],
+        "fuzzy_match": false
+      },
+      {
+        "entity": "sys-yes-no",
+        "values": []
+      }
+    ],
+    "metadata": {
+      "api_version": {
+        "major_version": "v2",
+        "minor_version": "2018-11-08"
+      }
+    },
+    "variables": [
+      {
+        "title": "address",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "address",
+        "data_type": "any",
+        "description": ""
+      },
+      {
+        "title": "address_quality",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "address_quality",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "Formatted Address",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "Formatted_Address",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "project_id",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "project_id",
+        "data_type": "any",
+        "description": "",
+        "initial_value": {
+          "scalar": "3eda9201-3aff-46fa-a338-18a5cd4e5259"
+        }
+      },
+      {
+        "title": "quality",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "quality",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "quality_1",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "quality_1",
+        "data_type": "boolean",
+        "description": "",
+        "initial_value": {
+          "scalar": false
+        }
+      },
+      {
+        "title": "quality_2",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "quality_2",
+        "data_type": "boolean",
+        "description": "",
+        "initial_value": {
+          "scalar": false
+        }
+      }
+    ],
+    "data_types": [],
+    "collections": [],
+    "counterexamples": [],
+    "system_settings": {
+      "nlp": {
+        "model": "latest"
+      },
+      "variable": {
+        "format": {
+          "time": {
+            "pattern": "short"
+          },
+          "currency": {
+            "fraction_digits": 2
+          }
+        }
+      },
+      "off_topic": {
+        "enabled": true
+      },
+      "auto_learn": {
+        "apply": true
+      },
+      "launch_mode": {
+        "default": "learning",
+        "enabled": false,
+        "learning": {
+          "step_retry_threshold": 2,
+          "use_connect_to_support": "more_often",
+          "single_answer_clarification": "more_often",
+          "disambiguation_clarification": "more_often"
+        },
+        "confident": {
+          "step_retry_threshold": 4,
+          "use_connect_to_support": "sometimes",
+          "single_answer_clarification": "sometimes",
+          "disambiguation_clarification": "sometimes"
+        }
+      },
+      "topic_switch": {
+        "enabled": true,
+        "messages": {
+          "enable_confirmation": true,
+          "confirmation_failure": {
+            "generic": [
+              {
+                "values": [
+                  {
+                    "text_expression": {
+                      "concat": [
+                        {
+                          "scalar": "I'm sorry, I did not catch that, please confirm."
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "response_type": "text",
+                "selection_policy": "sequential"
+              }
+            ]
+          },
+          "confirmation_request": {
+            "generic": [
+              {
+                "values": [
+                  {
+                    "text_expression": {
+                      "concat": [
+                        {
+                          "scalar": "Do you want to continue with the previous topic: "
+                        },
+                        {
+                          "system_variable": "digressed_from"
+                        },
+                        {
+                          "scalar": "?"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "response_type": "text",
+                "selection_policy": "sequential"
+              },
+              {
+                "options": [
+                  {
+                    "label": "Yes",
+                    "value": {
+                      "input": {
+                        "text": "Yes"
+                      }
+                    }
+                  },
+                  {
+                    "label": "No",
+                    "value": {
+                      "input": {
+                        "text": "No"
+                      }
+                    }
+                  }
+                ],
+                "response_type": "option",
+                "repeat_on_reprompt": true
+              }
+            ]
+          }
+        },
+        "max_tries": 3
+      },
+      "generative_ai": {
+        "slot_filling": {
+          "enabled": true
+        },
+        "general_purpose_answering": {
+          "enabled": false
+        }
+      },
+      "disambiguation": {
+        "prompt": "Did you mean:",
+        "enabled": true,
+        "randomize": true,
+        "max_suggestions": 5,
+        "suggestion_text_policy": "title",
+        "none_of_the_above_prompt": "None of the above",
+        "use_connect_to_support_prompt": "Connect to support",
+        "single_answer_clarification_prompt": "Something else"
+      },
+      "search_routing": {
+        "target": "conversational_search"
+      },
+      "spelling_auto_correct": true
+    },
+    "learning_opt_out": false
+  },
+  "description": "created for assistant 51ad437d-f0d2-4e18-bbc7-49af4f14d1ee",
+  "assistant_id": "51ad437d-f0d2-4e18-bbc7-49af4f14d1ee",
+  "workspace_id": "5335ff31-a209-40a7-8408-e02564c126aa",
+  "dialog_settings": {},
+  "next_snapshot_version": "1",
+  "environment_id": "d71954cd-c7d6-40ef-add5-7aeb1c3dfad0"
+}
