@@ -1,14 +1,322 @@
 {
-  "name": "Jason L Testing-action",
+  "name": "AVI Demo-action",
   "type": "action",
   "valid": true,
   "status": "Available",
-  "created": "2024-05-20T01:55:46.766Z",
-  "updated": "2024-07-25T20:51:29.082Z",
+  "created": "2024-07-26T19:17:05.394Z",
+  "updated": "2024-09-16T14:52:13.569Z",
   "language": "en",
-  "skill_id": "5335ff31-a209-40a7-8408-e02564c126aa",
+  "skill_id": "41817edb-cc63-4b20-aeb9-8cd85e397ca6",
   "workspace": {
     "actions": [
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "step_294",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "Please provide the phone number in e.164 format, i.e. +1 222 333 4444"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential",
+                  "repeat_on_reprompt": false
+                }
+              ]
+            },
+            "handlers": [
+              {
+                "type": "not_found",
+                "title": "validation_not_found_handler",
+                "output": {
+                  "generic": [
+                    {
+                      "values": [
+                        {
+                          "text_expression": {
+                            "concat": [
+                              {
+                                "scalar": "I'm sorry, I did not catch that, please restate your response."
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "response_type": "text",
+                      "selection_policy": "incremental"
+                    }
+                  ]
+                },
+                "handler": "validation_not_found_handler",
+                "resolver": {
+                  "type": "prompt_again"
+                },
+                "next_handler": "validation_not_found_max_tries_handler"
+              },
+              {
+                "type": "not_found_max_tries",
+                "title": "validation_not_found_max_tries_handler",
+                "handler": "validation_not_found_max_tries_handler",
+                "resolver": {
+                  "type": "fallback"
+                }
+              }
+            ],
+            "question": {
+              "entity": "entity_24139",
+              "max_tries": 3
+            },
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_294",
+            "next_step": "step_160"
+          },
+          {
+            "step": "step_160",
+            "handlers": [],
+            "resolver": {
+              "type": "callout",
+              "callout": {
+                "path": "/PhoneNumberValidation/Interactive/Validate/v2.2/json.ws",
+                "type": "integration_interaction",
+                "method": "POST",
+                "internal": {
+                  "spec_hash_id": "9215c2bc58db1cdb6ba07bef006e23f3c94b322604806953db26d4e30ae7a7b0",
+                  "match_scenario": 10,
+                  "catalog_item_id": "91870683-19a4-481c-abe2-603d47244d5b"
+                },
+                "request_mapping": {
+                  "query": [
+                    {
+                      "value": {
+                        "variable": "step_294"
+                      },
+                      "parameter": "Phone"
+                    }
+                  ]
+                },
+                "result_variable": "step_160_result_1"
+              }
+            },
+            "variable": "step_160",
+            "next_step": "step_381"
+          },
+          {
+            "step": "step_381",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "${step_160_result_1.body}.get(0).IsValid"
+                  },
+                  "skill_variable": "isvalid"
+                },
+                {
+                  "value": {
+                    "expression": "${step_160_result_1.body}.get(0).NationalFormat"
+                  },
+                  "skill_variable": "phone_formatted"
+                },
+                {
+                  "value": {
+                    "expression": "${step_160_result_1.body}.get(0).CountryPrefix"
+                  },
+                  "skill_variable": "country_prefix"
+                },
+                {
+                  "value": {
+                    "expression": "${step_160_result_1.body}.get(0).NetworkCountry"
+                  },
+                  "skill_variable": "network_country"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_381",
+            "next_step": "step_906"
+          },
+          {
+            "step": "step_906",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "check phone number complete.  The number provided is associated with country "
+                          },
+                          {
+                            "skill_variable": "network_country"
+                          },
+                          {
+                            "scalar": " and has a formatted value of:\n\n"
+                          },
+                          {
+                            "skill_variable": "country_prefix"
+                          },
+                          {
+                            "scalar": " "
+                          },
+                          {
+                            "skill_variable": "phone_formatted"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_906",
+            "condition": {
+              "matches": [
+                {
+                  "skill_variable": "isvalid"
+                },
+                {
+                  "scalar": "Yes",
+                  "options": {
+                    "ignore_case": true
+                  }
+                }
+              ]
+            },
+            "next_step": "step_746"
+          },
+          {
+            "step": "step_746",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The phone number provided, "
+                          },
+                          {
+                            "variable": "step_294"
+                          },
+                          {
+                            "scalar": ", could not be verified."
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_746",
+            "condition": {
+              "matches": [
+                {
+                  "skill_variable": "isvalid"
+                },
+                {
+                  "scalar": "No",
+                  "options": {
+                    "ignore_case": true
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Verify phone number",
+        "action": "action_14333",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "intent": "action_14333_intent_43409"
+        },
+        "variables": [
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_160",
+            "data_type": "any"
+          },
+          {
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_160_result_1",
+            "data_type": "any"
+          },
+          {
+            "title": "Please provide the phone number in e.164 format, i.e. +1 222 333",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_294",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_381",
+            "data_type": "any"
+          },
+          {
+            "title": "The phone number provided, {variable}, could not be verified.",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_746",
+            "data_type": "any"
+          },
+          {
+            "title": "check phone number complete. The number provided is associated w",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_906",
+            "data_type": "any"
+          }
+        ],
+        "launch_mode": "learning",
+        "next_action": "action_33655",
+        "topic_switch": {
+          "allowed_from": true,
+          "allowed_into": true,
+          "never_return": false
+        },
+        "disambiguation_opt_out": false
+      },
       {
         "type": "standard",
         "steps": [
@@ -93,13 +401,13 @@
             "resolver": {
               "type": "callout",
               "callout": {
-                "path": "/data_intg/v3/dataservice/ds-service-no-null",
+                "path": "/data_intg/v3/dataservice/ds-service",
                 "type": "integration_interaction",
                 "method": "POST",
                 "internal": {
-                  "spec_hash_id": "6c3ff876b2dbfd846e9fa098df5a6159a14146e5902bb202d2d9b1a956df4dbd",
-                  "match_scenario": 1,
-                  "catalog_item_id": "be93372d-23ca-4b60-ac2f-6d7468113d53"
+                  "spec_hash_id": "3288d40f24e003a903b694a335d72322d3442896f5d682fd4794dcaef0ff1658",
+                  "match_scenario": 10,
+                  "catalog_item_id": "e5d1ba62-451a-4c8d-b500-2550ae619ae1"
                 },
                 "request_mapping": {
                   "body": [
@@ -498,6 +806,9 @@
               "type": "replay",
               "clear": [
                 {
+                  "variable": "step_492"
+                },
+                {
                   "variable": "step_891"
                 },
                 {
@@ -705,6 +1016,302 @@
         ],
         "launch_mode": "learning",
         "next_action": "fallback",
+        "topic_switch": {
+          "allowed_from": true,
+          "allowed_into": true,
+          "never_return": false
+        },
+        "disambiguation_opt_out": false
+      },
+      {
+        "type": "standard",
+        "steps": [
+          {
+            "step": "step_102",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "What is the email?"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential",
+                  "repeat_on_reprompt": false
+                }
+              ]
+            },
+            "handlers": [
+              {
+                "type": "not_found",
+                "title": "validation_not_found_handler",
+                "output": {
+                  "generic": [
+                    {
+                      "values": [
+                        {
+                          "text_expression": {
+                            "concat": [
+                              {
+                                "scalar": "I'm sorry, I did not catch that, please restate your response."
+                              }
+                            ]
+                          }
+                        }
+                      ],
+                      "response_type": "text",
+                      "selection_policy": "incremental"
+                    }
+                  ]
+                },
+                "handler": "validation_not_found_handler",
+                "resolver": {
+                  "type": "prompt_again"
+                },
+                "next_handler": "validation_not_found_max_tries_handler"
+              },
+              {
+                "type": "not_found_max_tries",
+                "title": "validation_not_found_max_tries_handler",
+                "handler": "validation_not_found_max_tries_handler",
+                "resolver": {
+                  "type": "fallback"
+                }
+              }
+            ],
+            "question": {
+              "entity": "entity_17812",
+              "max_tries": 3
+            },
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_102",
+            "next_step": "step_680"
+          },
+          {
+            "step": "step_680",
+            "handlers": [],
+            "resolver": {
+              "type": "callout",
+              "callout": {
+                "path": "/EmailValidation/Interactive/Validate/v2/json.ws",
+                "type": "integration_interaction",
+                "method": "POST",
+                "internal": {
+                  "spec_hash_id": "440c74c64af1478b20de2909437d9de179dd0a41dcc655800808448aa21c931d",
+                  "match_scenario": 10,
+                  "catalog_item_id": "91870683-19a4-481c-abe2-603d47244d5b"
+                },
+                "request_mapping": {
+                  "query": [
+                    {
+                      "value": {
+                        "variable": "step_102"
+                      },
+                      "parameter": "Email"
+                    },
+                    {
+                      "value": {
+                        "scalar": 15000
+                      },
+                      "parameter": "Timeout"
+                    }
+                  ]
+                },
+                "result_variable": "step_680_result_1"
+              }
+            },
+            "variable": "step_680",
+            "next_step": "step_729"
+          },
+          {
+            "step": "step_729",
+            "context": {
+              "variables": [
+                {
+                  "value": {
+                    "expression": "${step_680_result_1.body}.get(0).EmailAddress"
+                  },
+                  "skill_variable": "email"
+                },
+                {
+                  "value": {
+                    "expression": "${step_680_result_1.body}.get(0).ResponseCode"
+                  },
+                  "skill_variable": "response_code"
+                },
+                {
+                  "value": {
+                    "expression": "${step_680_result_1.body}.get(0).ResponseMessage"
+                  },
+                  "skill_variable": "response_statement"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "continue"
+            },
+            "variable": "step_729",
+            "next_step": "step_713"
+          },
+          {
+            "step": "step_713",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": ""
+                          },
+                          {
+                            "skill_variable": "response_statement"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_713",
+            "condition": {
+              "matches": [
+                {
+                  "skill_variable": "response_code"
+                },
+                {
+                  "scalar": "Invalid",
+                  "options": {
+                    "ignore_case": true
+                  }
+                }
+              ]
+            },
+            "next_step": "step_241"
+          },
+          {
+            "step": "step_241",
+            "output": {
+              "generic": [
+                {
+                  "values": [
+                    {
+                      "text_expression": {
+                        "concat": [
+                          {
+                            "scalar": "The email: "
+                          },
+                          {
+                            "skill_variable": "email"
+                          },
+                          {
+                            "scalar": " is Valid.\n\n\n\n"
+                          },
+                          {
+                            "skill_variable": "response_statement"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "response_type": "text",
+                  "selection_policy": "sequential"
+                }
+              ]
+            },
+            "handlers": [],
+            "resolver": {
+              "type": "end_action"
+            },
+            "variable": "step_241",
+            "condition": {
+              "contains": [
+                {
+                  "skill_variable": "response_code"
+                },
+                {
+                  "scalar": "Valid"
+                }
+              ]
+            }
+          }
+        ],
+        "title": "Verify email",
+        "action": "action_33655",
+        "boosts": [],
+        "handlers": [],
+        "condition": {
+          "intent": "action_33655_intent_13722"
+        },
+        "variables": [
+          {
+            "title": "What is the email?",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_102",
+            "data_type": "any"
+          },
+          {
+            "title": "The email: {variable} is Valid. {variable}",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_241",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_680",
+            "data_type": "any"
+          },
+          {
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_680_result_1",
+            "data_type": "any"
+          },
+          {
+            "title": "{variable}",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_713",
+            "data_type": "any"
+          },
+          {
+            "title": "No response",
+            "privacy": {
+              "enabled": false
+            },
+            "variable": "step_729",
+            "data_type": "any"
+          }
+        ],
+        "launch_mode": "learning",
+        "next_action": "action_22717",
         "topic_switch": {
           "allowed_from": true,
           "allowed_into": true,
@@ -1231,11 +1838,25 @@
             "data_type": "any"
           }
         ],
-        "next_action": "action_22717",
+        "next_action": "action_14333",
         "disambiguation_opt_out": true
       }
     ],
     "intents": [
+      {
+        "intent": "action_14333_intent_43409",
+        "examples": [
+          {
+            "text": "check phone"
+          },
+          {
+            "text": "lookup number 1234567890"
+          },
+          {
+            "text": "Verify phone number"
+          }
+        ]
+      },
       {
         "intent": "action_22717_intent_11668",
         "examples": [
@@ -1247,6 +1868,14 @@
           },
           {
             "text": "Verify Address"
+          }
+        ]
+      },
+      {
+        "intent": "action_33655_intent_13722",
+        "examples": [
+          {
+            "text": "Verify email"
           }
         ]
       },
@@ -1277,6 +1906,32 @@
         "entity": "danger_words",
         "values": [],
         "fuzzy_match": false
+      },
+      {
+        "entity": "entity_17812",
+        "values": [
+          {
+            "type": "patterns",
+            "value": "Email",
+            "patterns": [
+              "\\b(?:[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\.)+[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[A-Za-z0-9-]*[A-Za-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])\\b"
+            ]
+          }
+        ],
+        "fuzzy_match": true
+      },
+      {
+        "entity": "entity_24139",
+        "values": [
+          {
+            "type": "patterns",
+            "value": "Phone number",
+            "patterns": [
+              "\\b(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\b"
+            ]
+          }
+        ],
+        "fuzzy_match": true
       },
       {
         "entity": "profane_words",
@@ -1314,11 +1969,56 @@
         "description": ""
       },
       {
+        "title": "country_prefix",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "country_prefix",
+        "data_type": "number",
+        "description": ""
+      },
+      {
+        "title": "email",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "email",
+        "data_type": "string",
+        "description": ""
+      },
+      {
         "title": "Formatted Address",
         "privacy": {
           "enabled": false
         },
         "variable": "Formatted_Address",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "isvalid",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "isvalid",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "network_country",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "network_country",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "phone_formatted",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "phone_formatted",
         "data_type": "string",
         "description": ""
       },
@@ -1366,6 +2066,24 @@
         "initial_value": {
           "scalar": false
         }
+      },
+      {
+        "title": "response_code",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "response_code",
+        "data_type": "string",
+        "description": ""
+      },
+      {
+        "title": "response_statement",
+        "privacy": {
+          "enabled": false
+        },
+        "variable": "response_statement",
+        "data_type": "string",
+        "description": ""
       }
     ],
     "data_types": [],
@@ -1506,9 +2224,9 @@
     "learning_opt_out": false
   },
   "description": "created for assistant 51ad437d-f0d2-4e18-bbc7-49af4f14d1ee",
-  "assistant_id": "51ad437d-f0d2-4e18-bbc7-49af4f14d1ee",
-  "workspace_id": "5335ff31-a209-40a7-8408-e02564c126aa",
+  "assistant_id": "69d3f00b-249d-484c-a5cd-15ddfcb0e436",
+  "workspace_id": "41817edb-cc63-4b20-aeb9-8cd85e397ca6",
   "dialog_settings": {},
   "next_snapshot_version": "1",
-  "environment_id": "d71954cd-c7d6-40ef-add5-7aeb1c3dfad0"
+  "environment_id": "dc7f4673-a4a1-4ebf-af46-4ca75a233611"
 }

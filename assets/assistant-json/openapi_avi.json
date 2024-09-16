@@ -1,0 +1,368 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OpenAPI spec for TD Synnex AVI calls",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://{host}",
+      "variables": {
+        "host": {
+          "default": "abc.example.com"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "getToken": []
+    }
+  ],
+  "paths": {
+    "/data_intg/v3/dataservice/ds-service": {
+      "post": {
+        "description": "Call AVI",
+        "summary": "Verify and address to ensure proper formatting",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Project ID"
+          }
+        ],
+        "requestBody": {
+          "description": "Address, email, or phone verification",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/aviRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/aviResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "aviRequest": {
+        "type": "object",
+        "properties": {
+          "input_data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Address": {
+                  "type": "string"
+                },
+                "Country": {
+                  "type": "string"
+                },
+                "City": {
+                  "type": "string"
+                },
+                "State": {
+                  "type": "string"
+                },
+                "Zip": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "job_parameters": {
+            "type": "object",
+            "properties": {
+              "$APT_JOB_MONITOR_TIMEOUT": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "aviResponse": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "result": {
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "string"
+              },
+              "dataservice_name": {
+                "type": "string"
+              },
+              "run_id": {
+                "type": "string"
+              },
+              "bookmark_id": {
+                "type": "string"
+              },
+              "return_value": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "Address": {
+                      "type": "string"
+                    },
+                    "City": {
+                      "type": "string"
+                    },
+                    "State": {
+                      "type": "string"
+                    },
+                    "Zip": {
+                      "type": "string"
+                    },
+                    "Country": {
+                      "type": "string"
+                    },
+                    "GroupID_QSAV": {
+                      "type": "string"
+                    },
+                    "AccuracyCode_QSAV": {
+                      "type": "string"
+                    },
+                    "AddressQualityIndex_QSAV": {
+                      "type": "string"
+                    },
+                    "Organization_QSAV": {
+                      "type": "string"
+                    },
+                    "Department_QSAV": {
+                      "type": "string"
+                    },
+                    "Function_QSAV": {
+                      "type": "string"
+                    },
+                    "Contact_QSAV": {
+                      "type": "string"
+                    },
+                    "Building_QSAV": {
+                      "type": "string"
+                    },
+                    "Subbuilding_QSAV": {
+                      "type": "string"
+                    },
+                    "HouseNumber_QSAV": {
+                      "type": "string"
+                    },
+                    "Street_QSAV": {
+                      "type": "string"
+                    },
+                    "DependentStreet_QSAV": {
+                      "type": "string"
+                    },
+                    "POBOX_QSAV": {
+                      "type": "string"
+                    },
+                    "Locality_QSAV": {
+                      "type": "string"
+                    },
+                    "DependentLocality_QSAV": {
+                      "type": "string"
+                    },
+                    "DoubleDependentLocality_QSAV": {
+                      "type": "string"
+                    },
+                    "PostCode_QSAV": {
+                      "type": "string"
+                    },
+                    "PostalCodePrimary_QSAV": {
+                      "type": "string"
+                    },
+                    "PostalCodeSecondary_QSAV": {
+                      "type": "string"
+                    },
+                    "SuperAdministrativeArea_QSAV": {
+                      "type": "string"
+                    },
+                    "AdministrativeArea_QSAV": {
+                      "type": "string"
+                    },
+                    "SubAdministrativeArea_QSAV": {
+                      "type": "string"
+                    },
+                    "Country_QSAV": {
+                      "type": "string"
+                    },
+                    "ISO3166_2_QSAV": {
+                      "type": "string"
+                    },
+                    "ISO3166_3_QSAV": {
+                      "type": "string"
+                    },
+                    "ISO3166_N_QSAV": {
+                      "type": "string"
+                    },
+                    "Address_QSAV": {
+                      "type": "string"
+                    },
+                    "Residue_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress1_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress2_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress3_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress4_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress5_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress6_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress7_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress8_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress1_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress2_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress3_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress4_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress5_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress6_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress7_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress8_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress9_QSAV": {
+                      "type": "string"
+                    },
+                    "FormattedAddress10_QSAV": {
+                      "type": "string"
+                    },
+                    "AddressFormat_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddress_QSAV": {
+                      "type": "string"
+                    },
+                    "DeliveryAddressFormat_QSAV": {
+                      "type": "string"
+                    },
+                    "LocalityExtra_QSAV": {
+                      "type": "string"
+                    },
+                    "LocalitySpecial_QSAV": {
+                      "type": "string"
+                    },
+                    "PremiseExtra_QSAV": {
+                      "type": "string"
+                    },
+                    "GeoAccuracy_QSAV": {
+                      "type": "string"
+                    },
+                    "Latitude_QSAV": {
+                      "type": "string"
+                    },
+                    "Longitude_QSAV": {
+                      "type": "string"
+                    },
+                    "GeoDistance_QSAV": {
+                      "type": "string"
+                    },
+                    "CensusCode_QSAV": {
+                      "type": "string"
+                    },
+                    "CensusClassCode_QSAV": {
+                      "type": "string"
+                    },
+                    "GNISFeatureID_QSAV": {
+                      "type": "string"
+                    },
+                    "CBSAMetropolitanStatisticalArea_QSAV": {
+                      "type": "string"
+                    },
+                    "CBSAMicropolitanStatisticalArea_QSAV": {
+                      "type": "string"
+                    },
+                    "NECTAMetropolitanStatisticalArea_QSAV": {
+                      "type": "string"
+                    },
+                    "NECTAMicropolitanStatisticalArea_QSAV": {
+                      "type": "string"
+                    },
+                    "MetropolitanDivision_QSAV": {
+                      "type": "string"
+                    },
+                    "NECTADivision_QSAV": {
+                      "type": "string"
+                    },
+                    "CensusIndicator_QSAV": {
+                      "type": "string"
+                    },
+                    "AdministrativeAreaISO2_QSAV": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "getToken": {
+        "type": "oauth2",
+        "flows": {
+          "x-password": {
+            "tokenUrl": "https://avi-authorization.1e81yylj6fds.us-south.codeengine.appdomain.cloud",
+            "paramKeys": [
+              "username"
+            ],
+            "secretKeys": [
+              "password"
+            ],
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

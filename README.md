@@ -72,15 +72,15 @@ With the Authorization code running, this section will describe how to create an
 
 3. Now that the custom extension is in place, it is time to import an address verification Action into the assistant.  Download the Action below.
    [Download Assistant Action](./assets/assistant-json/AVI-action.json)
-4. In the Assistant UI, navigate to **Actions**.  There will be a gear icon in the upper right corner of the screen for global settings.  Open this window and click on the *Upload/Download* tab.  Upload the AVI-action.json file to this window and select Upload.  
+4. In the Assistant UI, navigate to **Actions**.  There will be a gear icon in the upper right corner of the screen for global settings.  Open this window and click on the *Upload/Download* tab.  Upload the [AVI-action.json](./assets/assistant-json/Jason-L-Testing-action.json "download"       ) file to this window and select Upload.  
    > **Warning**  
    > This will replace all data in the Assistant, so ensure that the correct Assistant is selected.
 5. 
 
 ## Use the Preview to verify an address
 
-1. Login to the Assistant that you setup in the previous section.
-2. Go to the Preview Section
-3. Start a chat with the utterance "Verify address"
-4. The Assistant will prompt you asking for an address to verify.  Enter the requested address.
-5. The Assistant will return the verified address or suggest an update.
+1. Login to the watsonx Assistant instance that you set up in the previous section. Make sure you have the necessary credentials and access rights to use the Assistant.
+2. Once logged in, navigate to the Preview section of the Assistant. This section allows you to test and interact with your Assistant in a simulated environment.
+3. In the Preview section, start a new chat by typing the utterance "Verify address" in the input field. Press Enter to send the message.
+4. The Assistant will respond by asking for an address to verify. Enter a valid address in the format requested by the Assistant (e.g., street address, city, state, zip code).
+5. The Assistant will process the address using the custom extension and return the verified address or suggest an update if necessary. Review the response to ensure it is accurate and relevant.

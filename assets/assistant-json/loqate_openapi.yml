@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  title: Loqate Validation API
+  description: API for validating email addresses and phone numbers
+  version: 2.0.0
+servers:
+  - url: https://api.addressy.com
+security:
+  - ApiKeyAuth: []
+paths:
+  /EmailValidation/Interactive/Validate/v2/json.ws :
+    post:
+      summary: Validate an email address
+      description: Validate an email address using the provided key and email address
+      parameters:
+        # - in: query
+        #   name: Key
+        #   required: true
+        #   schema: 
+        #     type: string
+        #     description: The key to use to authenticate to the service
+        - in: query
+          name: Email
+          required: true
+          schema:
+            type: string
+          description: The email address to verify.
+        - in: query
+          name: Timeout
+          schema:
+            type: integer
+          description: The time (in milliseconds) you want to give for the valiation attempt to be executed within. Value must be between 1 and 15000 (values outside of these ranges will fallback to the default of 15000).
+        - in: query
+          name: AdditionalFields
+          schema:
+            type: string
+          description: The option to return additional fields
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    ResponseCode:
+                      type: string
+                      enum:
+                        - Valid
+                        - Valid_CatchAll
+                        - Invalid
+                        - Timeout
+                      description: The response code
+                    ResponseMessage:
+                      type: string
+                      description: A textual description of the ResponseCode returned
+                    EmailAddress:
+                      type: string
+                      description: The email address that verification was attempted on
+                    UserAccount:
+                      type: string
+                      description: The account portion of the email address provided
+                    Domain:
+                      type: string
+                      description: The domain portion of the email address provided
+                    IsDisposableOrTemporary:
+                      type: boolean
+                      description: Whether the email address provided is a disposable mailbox
+                    IsComplainerOrFraudRisk:
+                      type: boolean
+                      description: This field is no longer valid and will always return False
+                    Duration:
+                      type: number
+                      format: float
+                      description: The duration (in seconds) that the email validation took
+                    Reason:
+                      type: string
+                      description: The reason the email was not valid
+                    Risk:
+                      type: string
+                      enum:
+                        - High
+                        - Medium
+                        - Low
+                        - Unknown
+                      description: The risk score of the email address
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /PhoneNumberValidation/Interactive/Validate/v2.2/json.ws:
+    post:
+      summary: Validate a phone number
+      description: Validate a phone number and retrieve additional information
+      parameters:
+        # - in: query
+        #   name: Key
+        #   required: true
+        #   schema:
+        #     type: string
+        #     description: The key to use to authenticate to the service
+        - in: query
+          name: Phone
+          required: true
+          schema:
+            type: string
+          description: The mobile/cell phone number to verify
+        - in: query
+          name: Country
+          schema:
+            type: string
+          description: The ISO2 or ISO3 country code of the number you are trying to validate
+        - in: query
+          name: Iso3Country
+          schema:
+            type: string
+          description: The option to return the ISO3 country code in the response
+        - in: query
+          name: AdditionalFields
+          schema:
+            type: string
+          description: The option to return additional fields
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    PhoneNumber:
+                      type: string
+                      description: The recipient phone number in international format
+                    RequestProcessed:
+                      type: boolean
+                      description: Returns true if we managed to process the request on the network or false if the validation attempt was unsuccessful
+                    IsValid:
+                      type: string
+                      description: Whether the number is valid or not
+                    NetworkCode:
+                      type: string
+                      description: The current operator serving the supplied number
+                    NetworkName:
+                      type: string
+                      description: The name of the current operator serving the supplied number
+                    NetworkCountry:
+                      type: string
+                      description: The country code of the operator
+                    NationalFormat:
+                      type: string
+                      description: The domestic network format
+                    CountryPrefix:
+                      type: integer
+                      description: The country prefix that must be prepended to the number when dialling internationally
+                    NumberType:
+                      type: string
+                      description: The type of number that was detected in the request
+                    MccMnc:
+                      type: string
+                      description: The mobile country code and mobile network code concatenated
+                    Ported:
+                      type: string
+                      description: Returns True if the number has been ported to another network
+                    PortedNetworkName:
+                      type: string
+                      description: The ported network name that the mobile number is registered with
+                    PortedNetworkCountry:
+                      type: string
+                      description: The country code of the network that the mobile number has been ported to
+                    Roaming:
+                      type: string
+                      description: Returns True if the number is currently roaming in another country
+                    RoamingNetworkName:
+                      type: string
+                      description: The network name that the mobile number is currently registered with whilst roaming
+                    RoamingNetworkCountry:
+                      type: string
+                      description: The network country that the mobile number is currently in whilst roaming
+                    OriginalNetworkName:
+                      type: string
+                      description: The original network name that the mobile number was registered with
+                    OriginalNetworkCountry:
+                      type: string
+                      description: The original country code that the phone was registered with
+        400:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: Error message
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: Key
